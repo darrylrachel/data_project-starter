@@ -1,2 +1,2 @@
-# data_project-starter
-Data Project Starter Kit
+# SQL Data Project Starter Kit
+Delete before pushing
