@@ -1,13 +1,10 @@
 -- =============================================================
--- Procedure: bronze.load_bronze
--- Purpose:   Create medallion schemas + bronze tables (if needed),
+-- Procedure: load schema
+-- Purpose:   Create schemas + tables (if needed),
 --            truncate, and load CSVs from /datasets.
--- Start/Stop Docker Container:
---            Stop: docker compose down -v
---            Start: docker compose up -d
 -- =============================================================
 
-CREATE OR REPLACE PROCEDURE bronze.load_bronze()
+CREATE OR REPLACE PROCEDURE "schema name".load_"schema name"()
 LANGUAGE plpgsql
 AS $$
 DECLARE
@@ -15,14 +12,14 @@ DECLARE
   v_step_start  timestamptz;
   v_rows        bigint;
 BEGIN
-  RAISE NOTICE 'Starting bronze load...';
+  RAISE NOTICE 'Starting "schema name" load...';
 
   -- --------------------
   -- Schemas
   -- --------------------
-  CREATE SCHEMA IF NOT EXISTS bronze;
-  CREATE SCHEMA IF NOT EXISTS silver;
-  CREATE SCHEMA IF NOT EXISTS gold;
+  CREATE SCHEMA IF NOT EXISTS "schema name";
+  CREATE SCHEMA IF NOT EXISTS "schema name";
+  CREATE SCHEMA IF NOT EXISTS "schema name";
 
   -- --------------------
   -- Tables (Bronze)
@@ -34,9 +31,9 @@ BEGIN
   -- --------------------
   -- Truncate for reload
   -- --------------------
-  RAISE NOTICE 'Truncating bronze tables...';
+  RAISE NOTICE 'Truncating "schema name" tables...';
   TRUNCATE TABLE
-    bronze.
+    "schema name".
 
   -- --------------------
   -- Load: File
@@ -49,7 +46,7 @@ BEGIN
   $f$, '/datasets/ add_file.csv');
 
   SELECT count(*) INTO v_rows FROM bronze. add_file;
-  RAISE NOTICE 'Loaded bronze. add_file: % rows (%.3f sec)',
+  RAISE NOTICE 'Loaded "schema name". add_file: % rows (%.3f sec)',
     v_rows, EXTRACT(epoch FROM (clock_timestamp() - v_step_start));
 
 
@@ -57,4 +54,4 @@ END;
 $$;
 
 -- Run it:
-CALL bronze.load_bronze();
+CALL bronze.load_"schema name"();
